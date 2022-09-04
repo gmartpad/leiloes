@@ -14,8 +14,8 @@ export function validaFormatoNumericoDoLance(valorEmTexto) {
 }
 
 export function validaLance(valor, { lances, valorInicial }) {
-  const lanceMaiorOuIgualAoInicial = validaLanceMaiorOuIgualAoInicial(valor, valorInicial);
   const lanceMaiorQueLances = validaLanceMaiorQueLances(valor, lances);
+  const lanceMaiorOuIgualAoInicial = validaLanceMaiorOuIgualAoInicial(valor, valorInicial);
   
   if(lanceMaiorQueLances !== VALIDO) {
     return lanceMaiorQueLances;
@@ -28,7 +28,7 @@ export function validaLance(valor, { lances, valorInicial }) {
   return lanceMaiorQueLances;
 }
 
-function validaLanceMaiorOuIgualAoInicial(valor, valorInicial) {
+export function validaLanceMaiorOuIgualAoInicial(valor, valorInicial) {
   if (valor >= valorInicial) {
     return VALIDO;
   }
@@ -36,7 +36,7 @@ function validaLanceMaiorOuIgualAoInicial(valor, valorInicial) {
   return MENOR_QUE_VALOR_INICIAL;
 }
 
-function validaLanceMaiorQueLances(valor, lances) {
+export function validaLanceMaiorQueLances(valor, lances) {
   const lanceMaiorQueValor = lances.find(lance => lance.valor >= valor);
   if (!lanceMaiorQueValor) {
     return VALIDO;
