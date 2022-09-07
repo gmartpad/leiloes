@@ -1,7 +1,13 @@
-import { obtemLeiloes } from '../../src/repositorio/leilao'
+import { obtemLeiloes, obtemLeilao } from '../../src/repositorio/leilao'
 import apiLeiloes from '../../src/servicos/apiLeiloes'
 
 jest.mock('../../src/servicos/apiLeiloes')
+
+const mockLeilao = {
+  id: 1,
+  nome: 'Leilão',
+  descricao: 'Descrição do leilão'
+}
 
 const mockLeiloes = [
   {
@@ -48,6 +54,25 @@ describe("repositorio/leilao", () => {
       const leiloes = await obtemLeiloes()
       expect(leiloes).toEqual([])
       expect(apiLeiloes.get).toHaveBeenCalledWith('/leiloes')
+      expect(apiLeiloes.get).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  describe("obtemLeilao", () => {
+    it("deve retornar um leilao", async () => {
+      apiLeiloes.get.mockImplementation(() => mockRequisicao(mockLeilao))
+      const id = 1
+      const leilao = await obtemLeilao(id)
+      expect(leilao).toEqual(mockLeilao)
+      expect(apiLeiloes.get).toHaveBeenCalledWith(`/leiloes/${id}`)
+      expect(apiLeiloes.get).toHaveBeenCalledTimes(1)
+    })
+    it("deve retornar um objeto vazio quando a req falhar", async () => {
+      apiLeiloes.get.mockImplementation(() => mockRequisicaoErro())
+      const id = 1
+      const leilao = await obtemLeilao(id)
+      expect(leilao).toEqual({})
+      expect(apiLeiloes.get).toHaveBeenCalledWith(`/leiloes/${id}`)
       expect(apiLeiloes.get).toHaveBeenCalledTimes(1)
     })
   })
